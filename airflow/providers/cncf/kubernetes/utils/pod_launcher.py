@@ -139,14 +139,13 @@ class PodLauncher(LoggingMixin):
         :param get_logs: whether to read the logs locally
         :return:  Tuple[State, Optional[str]]
         """
-        if get_logs: # pylint: disable=too-many-nested-blocks
+        if get_logs:  # pylint: disable=too-many-nested-blocks
             read_logs_since_sec = None
             last_log_time = None
             while True:
                 logs = self.read_pod_logs(pod, timestamps=True, since_seconds=read_logs_since_sec)
                 for line in logs:
                     timestamp, message = self.parse_log_line(line.decode('utf-8'))
-                    last_log_time = pendulum.parse(timestamp)
                     self.log.info(message)
                     if timestamp:
                         last_log_time = timestamp
